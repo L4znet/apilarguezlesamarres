@@ -113,7 +113,7 @@ router.get('/', (req, res) => {
 
 router.post('/',jsonParser, async (req, res) => {
 
-    console.log(req.body.data)
+    console.log(req.body)
 
 
 
