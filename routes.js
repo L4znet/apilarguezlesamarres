@@ -10,5 +10,7 @@ router.get('/', function(req, res) {
 });
 
 router.use('/posts', require('./routes/posts').router);
+router.use('/search', require('./routes/search').router);
+router.use('/booking', require('./routes/booking').router);
 
 module.exports.router = router;
