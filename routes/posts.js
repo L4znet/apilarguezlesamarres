@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const {collection, setDoc, doc, getDatabase, query, getDocs, getFirestore, serverTimestamp, orderBy, limit  } = require("firebase/firestore");
+const {collection, setDoc, doc, getDoc, query, getDocs, getFirestore, serverTimestamp, orderBy, limit  } = require("firebase/firestore");
 const bodyParser = require("body-parser");
 const {initializeApp} = require("firebase/app");
 const {getStorage} = require("firebase/storage");
@@ -126,7 +126,6 @@ router.post('/',jsonParser, async (req, res) => {
         req.body.pricePer !== "" &&
         req.body.price !== ""
     ) {
-        let createdAt = Date.now()
 
         const random = (min, max) => {
             return Math.round(Math.random() * (max - min) + min).toString();
@@ -150,6 +149,7 @@ router.post('/',jsonParser, async (req, res) => {
             thumbnail:req.body.thumbnail,
             price:req.body.price,
             pricePer:req.body.pricePer,
+            authorId:req.body.authorId,
             createdAt:serverTimestamp()
         }, {
             merge: true
@@ -168,11 +168,18 @@ router.get('/',jsonParser, async (req, res) => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         offers.push(doc.data())
-
     });
 
     res.send(offers)
 
+})
+
+router.get('/:id',jsonParser, async (req, res) => {
+    if(req.params.id !== "" || req.params.id !== null){
+        const docRef = doc(db, "posts", req.params.id);
+        const docSnap = await getDoc(docRef);
+        res.send(docSnap.data())
+    }
 })
 
 module.exports.router = router;
