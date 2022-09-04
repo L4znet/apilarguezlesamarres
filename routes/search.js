@@ -2,96 +2,42 @@
  * @swagger
  *
  * tags:
- *   - name: pet
- *     description: Everything about your Pets
- * /posts:
- *   get:
- *     tags:
- *     - pet
- *     summary: Récupère les dernières offres
- *     description: Récupères les 5 dernières offres
- *     responses:
- *       200:
- *         description: Les offres
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
- * /post:
+ *   - name: Recherche
+ *     description: Le endpoint pour la recherche
+ * /search:
  *   post:
  *     tags:
- *     - pet
- *     summary: test
- *     description: Récupères les 5 dernières offres
- *     responses:
- *       200:
- *         description: Les offres
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
- * /post/{id}:
- *   get:
- *     tags:
- *     - pet
- *     summary: Récupère une offre par son id
- *     description: Récupère une offre par son id
- *     responses:
- *       200:
- *         description: Une offre
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
+ *     - Recherche
+ *     summary: Envoi du message support de l'utilisateur
+ *     description: Envoi du message support de l'utilisateur
+ *     parameters:
+ *         - in: query
+ *           name: localizationFilter
+ *           schema:
+ *             type: string
+ *           description: Filtre de localisation
+ *         - in: query
+ *           name: typeFilter
+ *           schema:
+ *             type: string
+ *           description: Filtre de type de véhicule
+ *         - in: query
+ *           name: wishFilter
+ *           schema:
+ *             type: string
+ *           description: Filtre de type d'envie
+ *         - in: query
+ *           name: query
+ *           schema:
+ *             type: string
+ *           description: Les termes de recherches
+
  *
  */
 
 
 const express = require('express');
 const router = express.Router();
-
 const {collection, setDoc, doc, getDatabase, query, getDocs, getFirestore, serverTimestamp, orderBy, limit  } = require("firebase/firestore");
 const bodyParser = require("body-parser");
 const {initializeApp} = require("firebase/app");
@@ -119,12 +65,32 @@ const client = new MeiliSearch({
 
 router.post('/',jsonParser, async (req, res) => {
     if(req.body.query){
-        client.index('id').search(req.body.query).then((test) => {
-            res.json(test)
+
+        let filters = []
+
+        if(req.body.localizationFilter.length > 0){
+            filters.push('localization = "' + req.body.localizationFilter +'"')
+        }
+
+        if(req.body.typeFilter.length > 0) {
+            filters.push('type = "' + req.body.typeFilter +'"')
+        }
+
+        if(req.body.typeFilter.length > 0) {
+            filters.push('type = "' + req.body.typeFilter +'"')
+        }
+
+        if(req.body.wishFilter.length > 0) {
+            filters.push('wishs = "' + req.body.wishFilter +'"')
+        }
+
+        client.index('id').search(req.body.query, {
+            filter: filters
+        }).then((results) => {
+            res.json(results)
         })
     }
 })
-
 
 
 module.exports.router = router;

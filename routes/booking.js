@@ -2,89 +2,42 @@
  * @swagger
  *
  * tags:
- *   - name: pet
- *     description: Everything about your Pets
- * /posts:
- *   get:
- *     tags:
- *     - pet
- *     summary: Récupère les dernières offres
- *     description: Récupères les 5 dernières offres
- *     responses:
- *       200:
- *         description: Les offres
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
- * /post:
+ *   - name: Les réservations
+ *     description: Les endpoints des réservations
+ * /ask:
  *   post:
  *     tags:
- *     - pet
- *     summary: test
- *     description: Récupères les 5 dernières offres
- *     responses:
- *       200:
- *         description: Les offres
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
- * /post/{id}:
- *   get:
+ *     - Les réservations
+ *     summary: Enregistre une proposition de réservation
+ *     description: Enregistre une proposition de réservation
+ * /booked/{id}:
+ *   post:
  *     tags:
- *     - pet
- *     summary: Récupère une offre par son id
- *     description: Récupère une offre par son id
- *     responses:
- *       200:
- *         description: Une offre
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 offers:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: The offer ID.
- *                         example: 1
- *                       name:
- *                         type: string
- *                         description: Offer's title.
- *                         example: Yacht Imperator
+ *     - Les réservations
+ *     summary: Récupère les réservations d'un propriétaire
+ *     description: Récupère les réservations d'un propriétaire
+ *     parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *           description: L'id de l'offre
+ * /itemstobook/{tenant_id}:
+ *   post:
+ *     tags:
+ *     - Les réservations
+ *     summary: Récupère les réservations émise par un locataire
+ *     description: Récupère les réservations émise par un locataire
+ *     parameters:
+ *         - in: path
+ *           name: tenant_id
+ *           required: true
+ *           schema:
+ *             type: integer
+ *             minimum: 1
+ *           description: L'id du locataire
  *
  */
 
@@ -92,7 +45,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {collection, setDoc, doc, getDatabase, query, getDocs, getFirestore, serverTimestamp, orderBy, limit, getDoc} = require("firebase/firestore");
+const {collection,document, addDoc, doc, getDatabase, query, getDocs, getFirestore, serverTimestamp, orderBy, limit, getDoc, where,
+    setDoc
+} = require("firebase/firestore");
 const bodyParser = require("body-parser");
 const {initializeApp} = require("firebase/app");
 const {getStorage} = require("firebase/storage");
@@ -111,32 +66,49 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let jsonParser = bodyParser.json()
-const { MeiliSearch } = require('meilisearch')
 
-const client = new MeiliSearch({
-    host: 'http://159.65.53.78'
-})
+router.post('/ask',jsonParser, async (req, res) => {
 
-router.post('/book',jsonParser, async (req, res) => {
+    const bookingRef = collection(db, "posts/" + req.body.offerId + "/bookings");
 
-    const random = (min, max) => {
-        return Math.round(Math.random() * (max - min) + min).toString();
-    }
-    const id = random(99999, 999999999999999999)
-
-    const bookingsRef = collection(db, "bookings");
-    await setDoc(doc(bookingsRef, id), {
-        key:id,
+    await setDoc(doc(bookingRef, req.body.id), {
+        id:req.body.id,
         offerId:req.body.offerId,
-        tenantId:req.body.tenantId,
-        ownerId:req.body.ownerId,
-        state:req.body.state,
-        createdAt:serverTimestamp()
+        startDate:req.body.startDate,
+        endDate:req.body.endDate,
+        state: req.body.state,
+        tenantId: req.body.tenantId,
+        tenantName: req.body.tenantName,
+        ownerId: req.body.ownerId,
+        createdAt: serverTimestamp()
     }, {
         merge: true
     }).then(() => {});
+
 })
 
+router.get('/booked/:offerId',jsonParser, async (req, res) => {
+
+    const bookingsRef = collection(db, "bookings");
+    const q = query(bookingsRef, where("offerId", "==", req.params.offerId));
+    const querySnapshot = await getDocs(q);
+    let bookedItem = []
+    querySnapshot.forEach((doc) => {
+        bookedItem.push(doc.data())
+    });
+    res.send(bookedItem)
+})
+
+router.get('/itemstobook/:tenantId',jsonParser, async (req, res) => {
+    const bookingsRef = collection(db, "bookings");
+    const q = query(bookingsRef, where("tenantId", "==", req.params.tenantId));
+    const querySnapshot = await getDocs(q);
+
+    let itemToBook = []
+    querySnapshot.forEach((doc) => {
+    });
+
+})
 
 
 module.exports.router = router;
