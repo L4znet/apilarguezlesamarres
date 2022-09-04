@@ -12,5 +12,7 @@ router.get('/', function(req, res) {
 router.use('/posts', require('./routes/posts').router);
 router.use('/search', require('./routes/search').router);
 router.use('/booking', require('./routes/booking').router);
+router.use('/payment', require('./routes/payment').router);
+router.use('/support', require('./routes/support').router);
 
 module.exports.router = router;
