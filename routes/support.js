@@ -66,7 +66,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let jsonParser = bodyParser.json()
-const { validator, oneOf, check} = require('express-validator');
 
 const nodemailer = require('nodemailer');
 const transporter = require("nodemailer/lib/mailer");
