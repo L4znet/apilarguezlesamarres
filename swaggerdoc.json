@@ -1,0 +1,561 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API de l'app mobile Larguez les amarres",
+      "version": "1.0.0",
+      "description": "API consommée par l'app Larguez les amarres"
+    },
+    "servers": [
+      {
+        "url": "https://apilarguezlesamarres.vercel.app"
+      }
+    ],
+    "paths": {
+      "/ask": {
+        "post": {
+          "tags": [
+            "Les réservations"
+          ],
+          "summary": "Enregistre une proposition de réservation",
+          "description": "Enregistre une proposition de réservation"
+        }
+      },
+      "/booked/{id}": {
+        "post": {
+          "tags": [
+            "Les réservations"
+          ],
+          "summary": "Récupère les réservations d'un propriétaire",
+          "description": "Récupère les réservations d'un propriétaire",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "description": "L'id de l'offre"
+            }
+          ]
+        }
+      },
+      "/itemstobook/{tenant_id}": {
+        "post": {
+          "tags": [
+            "Les réservations"
+          ],
+          "summary": "Récupère les réservations émise par un locataire",
+          "description": "Récupère les réservations émise par un locataire",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "tenant_id",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "description": "L'id du locataire"
+            }
+          ]
+        }
+      },
+      "/payment-sheet": {
+        "post": {
+          "tags": [
+            "Paiements"
+          ],
+          "summary": "Gère la transaction de paiement vers Stripe",
+          "description": "Gère la transaction de paiement vers Stripe",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "amount",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le montant du paiement"
+            }
+          ]
+        }
+      },
+      "/posts": {
+        "post": {
+          "tags": [
+            "Les offres"
+          ],
+          "summary": "Ajoute une offre",
+          "description": "Ajoute une offre",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "key",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "L'id de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "title",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le titre de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "boatName",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le nom du bateau"
+            },
+            {
+              "in": "query",
+              "name": "localization",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "La destination de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "capacity",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "La capacité du bateau"
+            },
+            {
+              "in": "query",
+              "name": "sleeping",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le nombre de couchettes"
+            },
+            {
+              "in": "query",
+              "name": "cabins",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le nombre de cabines"
+            },
+            {
+              "in": "query",
+              "name": "detail",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le texte de l'offre (la description)"
+            },
+            {
+              "in": "query",
+              "name": "captain",
+              "required": true,
+              "schema": {
+                "type": "boolean"
+              },
+              "description": "Est ce que la présence d'un capitaine est inclu avec l'offre ?"
+            },
+            {
+              "in": "query",
+              "name": "teams",
+              "required": true,
+              "schema": {
+                "type": "boolean"
+              },
+              "description": "Est ce que la présence d'un équipage est inclu avec l'offre ?"
+            },
+            {
+              "in": "query",
+              "name": "equipments",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Les équipements éventuellement présent sur le bateau"
+            },
+            {
+              "in": "query",
+              "name": "thumbnail",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "L'image de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "price",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le prix de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "type",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le type de véhicule"
+            },
+            {
+              "in": "query",
+              "name": "wishs",
+              "required": true,
+              "schema": {
+                "type": "array"
+              },
+              "description": "Les choses en plus que propose le propriétaire (les envies)"
+            },
+            {
+              "in": "query",
+              "name": "pricePer",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "La fréquence de calcule du prix (par semaine, par mois)"
+            },
+            {
+              "in": "query",
+              "name": "authorId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "L'id de l'auteur de l'offre (le propriétaire qui poste l'offre)"
+            }
+          ]
+        },
+        "put": {
+          "tags": [
+            "Les offres"
+          ],
+          "summary": "Pour modifier une offre",
+          "description": "Pour modifier une offre",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "title",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le titre de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "boatName",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le nom du bateau"
+            },
+            {
+              "in": "query",
+              "name": "localization",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "La destination de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "capacity",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "La capacité du bateau"
+            },
+            {
+              "in": "query",
+              "name": "sleeping",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le nombre de couchettes"
+            },
+            {
+              "in": "query",
+              "name": "cabins",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le nombre de cabines"
+            },
+            {
+              "in": "query",
+              "name": "detail",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le texte de l'offre (la description)"
+            },
+            {
+              "in": "query",
+              "name": "captain",
+              "required": true,
+              "schema": {
+                "type": "boolean"
+              },
+              "description": "Est ce que la présence d'un capitaine est inclu avec l'offre ?"
+            },
+            {
+              "in": "query",
+              "name": "teams",
+              "required": true,
+              "schema": {
+                "type": "boolean"
+              },
+              "description": "Est ce que la présence d'un équipage est inclu avec l'offre ?"
+            },
+            {
+              "in": "query",
+              "name": "equipments",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Les équipements éventuellement présent sur le bateau"
+            },
+            {
+              "in": "query",
+              "name": "thumbnail",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "L'image de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "price",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Le prix de l'offre"
+            },
+            {
+              "in": "query",
+              "name": "type",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Le type de véhicule"
+            },
+            {
+              "in": "query",
+              "name": "wishs",
+              "required": true,
+              "schema": {
+                "type": "array"
+              },
+              "description": "Les choses en plus que propose le propriétaire (les envies)"
+            },
+            {
+              "in": "query",
+              "name": "pricePer",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "La fréquence de calcule du prix (par semaine, par mois)"
+            }
+          ]
+        },
+        "get": {
+          "tags": [
+            "Les offres"
+          ],
+          "summary": "Pour récupérer les 5 dernières offres",
+          "description": "Pour récupérer les 5 dernières offres"
+        }
+      },
+      "/posts/{offerId}": {
+        "delete": {
+          "tags": [
+            "Les offres"
+          ],
+          "summary": "Pour supprimer une offre",
+          "description": "Pour supprimer une offre",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "offerId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "L'id de l'offre à supprimer"
+            }
+          ]
+        }
+      },
+      "/posts/{userId}/posts": {
+        "get": {
+          "tags": [
+            "Les offres"
+          ],
+          "summary": "Pour récupérer les offres postés par l'utilisateur",
+          "description": "Pour récupérer les offres postés par l'utilisateur",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "L'id de l'utilisateur"
+            }
+          ]
+        }
+      },
+      "/search": {
+        "post": {
+          "tags": [
+            "Recherche"
+          ],
+          "summary": "Envoi du message support de l'utilisateur",
+          "description": "Envoi du message support de l'utilisateur",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "localizationFilter",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Filtre de localisation"
+            },
+            {
+              "in": "query",
+              "name": "typeFilter",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Filtre de type de véhicule"
+            },
+            {
+              "in": "query",
+              "name": "wishFilter",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Filtre de type d'envie"
+            },
+            {
+              "in": "query",
+              "name": "query",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Les termes de recherches"
+            }
+          ]
+        }
+      },
+      "/support": {
+        "post": {
+          "tags": [
+            "Support"
+          ],
+          "summary": "Envoi du message support de l'utilisateur",
+          "description": "Envoi du message support de l'utilisateur",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "fromEmail",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "E-mail de l'utilisateur"
+            },
+            {
+              "in": "query",
+              "name": "message",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Message de l'utilisateur"
+            },
+            {
+              "in": "query",
+              "name": "message",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Message de l'utilisateur"
+            },
+            {
+              "in": "query",
+              "name": "displayname",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "Pseudo de l'utilisateur utilisé sur l'application"
+            },
+            {
+              "in": "query",
+              "name": "userId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              },
+              "description": "Id de l'utilisateur"
+            }
+          ]
+        }
+      }
+    },
+    "components": {},
+    "tags": [
+      {
+        "name": "Les réservations",
+        "description": "Les endpoints des réservations"
+      },
+      {
+        "name": "Paiements",
+        "description": "Le endpoint de paiement"
+      },
+      {
+        "name": "Les offres",
+        "description": "Les endpoints des offres"
+      },
+      {
+        "name": "Recherche",
+        "description": "Le endpoint pour la recherche"
+      },
+      {
+        "name": "Support",
+        "description": "Le endpoint du support technique"
+      }
+    ]
+}
