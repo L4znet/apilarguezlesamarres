@@ -2,17 +2,16 @@ const express = require('express');
 const app = express();
 const swaggerJSDoc = require('swagger-jsdoc');
 const routes = require('./routes');
+
 const swaggerUi = require('swagger-ui-express');
-
-
-const swaggerSpec = require('./swaggerdoc.json');
+const swaggerDocument = require('./swaggerdoc.json');
+const options = { customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.14.0/swagger-ui.min.css'};
 
 app.use(express.static('public'))
 app.use('/api', routes.router);
-app.use('/docs', swaggerUi.serve);
-app.get('/docs', swaggerUi.setup(swaggerSpec));
-
-
+app.use('/public', express.static('public'));
+app.use('/', swaggerUi.serve);
+app.get('/', swaggerUi.setup(swaggerDocument, options));
 app.listen(process.env.PORT || 3000);
 
 module.exports = app;
