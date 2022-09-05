@@ -13,6 +13,7 @@ const swaggerDefinition = {
     },
     servers: [
         { url: 'http://localhost:3000' },
+        { url: "https://apilarguezlesamarres.vercel.app" },
     ],
 
 };
@@ -23,7 +24,6 @@ const options = {
 };
 
 const swaggerSpec = swaggerJSDoc(options);
-
 
 app.use(express.static('public'))
 app.use('/api', routes.router);
