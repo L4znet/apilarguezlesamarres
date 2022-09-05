@@ -12,7 +12,6 @@ const swaggerDefinition = {
         description: "API consommée par l'app Larguez les amarres",
     },
     servers: [
-        { url: 'http://localhost:3000' },
         { url: "https://apilarguezlesamarres.vercel.app" },
     ],
 
