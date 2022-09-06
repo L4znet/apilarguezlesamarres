@@ -49,7 +49,7 @@ router.post('/payment-sheet',jsonParser, async (req, res) => {
             paymentIntent: paymentIntent.client_secret,
             ephemeralKey: ephemeralKey.secret,
             customer: customer.id,
-            publishableKey: 'pk_test_oKhSR5nslBRnBZpjO6KuzZeX'
+            publishableKey: 'pk_test_51LVn5JL4arJWUBbmOSkZphMuSBftatz3P54TS9huruc1XOCN1RqcIrLUmHxNwEtWE7R1m48BWkXoqEgDLCixHP2y00MPGChMt8'
         });
 
 
