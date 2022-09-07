@@ -37,7 +37,7 @@ router.post('/payment-sheet',jsonParser, async (req, res) => {
             {apiVersion: '2022-08-01'}
         );
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: (req.body.amount * 100) + 2000, // On applique une marge de 20 euros
+            amount: (req.body.amount * 100),
             currency: 'eur',
             customer: customer.id,
             automatic_payment_methods: {
